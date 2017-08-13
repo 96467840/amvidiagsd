@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.6.4" type="plugin" group="system" method="upgrade">
+	<name>plg_system_amvidiagsd</name>
+	<author>Amvidia!</author>
+	<creationDate>August 2017</creationDate>
+	<copyright>Copyright (C) 2017 Amvidia. All rights reserved.</copyright>
+	<license>The MIT License (MIT); see LICENSE</license>
+	<authorEmail>96467840@mail.ru</authorEmail>
+	<version>3.6.4</version>
+	<description>PLG_IDJSON_WEBSITE_XML_DESCRIPTION</description>
+	<files>
+		<filename plugin="amvidia">gsd.php</filename>
+	</files>
+	<config>
+		<fields name="params">
+		</fields>
+	</config>
+</extension>
