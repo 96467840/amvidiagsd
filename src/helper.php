@@ -12,8 +12,17 @@
 
 defined('_JEXEC') or die('Restricted Access');
 
+// docs
+// https://docs.joomla.org/How_to_use_the_filesystem_package
+
 class AmvidiaGSDHelper
 {
+    /**
+     *  Cache for data
+     *
+     *  @var  dictionary
+     */
+    private static $cache;
 
     /**
      *  Checks if document is a feed document (xml, rss, atom)
@@ -38,7 +47,10 @@ class AmvidiaGSDHelper
      */
     public static function getSiteName()
     {
-        return "Amvidia";//self::getParams()->get("sitename_name", JFactory::getConfig()->get('sitename'));
+        if (isset(AmvidiaGSDHelper::cache['sitename'])) return AmvidiaGSDHelper::cache['sitename'];
+
+        AmvidiaGSDHelper::cache['sitename'] = "Amvidia! " . time();
+        return AmvidiaGSDHelper::cache['sitename'];
     }
     
     /**
