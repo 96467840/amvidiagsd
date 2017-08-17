@@ -14,6 +14,8 @@ defined('_JEXEC') or die('Restricted Access');
 
 // docs
 // https://docs.joomla.org/How_to_use_the_filesystem_package
+// https://docs.joomla.org/Using_caching_to_speed_up_your_code
+// https://docs.joomla.org/Constants
 
 class AmvidiaGSDHelper
 {
@@ -22,7 +24,14 @@ class AmvidiaGSDHelper
      *
      *  @var  dictionary
      */
-    private static $cache;
+    private static $cache = [];
+
+    /**
+     *  Path to data
+     *
+     *  @var string
+     */
+    private static $path = JPATH_ROOT . '/microdata';
 
     /**
      *  Checks if document is a feed document (xml, rss, atom)
@@ -47,10 +56,11 @@ class AmvidiaGSDHelper
      */
     public static function getSiteName()
     {
-        if (isset(AmvidiaGSDHelper::cache['sitename'])) return AmvidiaGSDHelper::cache['sitename'];
-
-        AmvidiaGSDHelper::cache['sitename'] = "Amvidia! " . time();
-        return AmvidiaGSDHelper::cache['sitename'];
+        if (isset(self::$cache['settings'])) return self::$cache['settings']['sitename'];
+        
+        AmvidiaGSDHelper::ReadSettings();
+        
+        return self::$cache['settings']['sitename'];
     }
     
     /**
@@ -60,7 +70,11 @@ class AmvidiaGSDHelper
      */
     public static function getSiteLogo()
     {
-        return "https://amvidia.com/logo.png";
+        if (isset(self::$cache['settings'])) return self::$cache['settings']['sitelogo'];
+        
+        AmvidiaGSDHelper::ReadSettings();
+        
+        return self::$cache['settings']['sitelogo'];
     }
 
     /**
@@ -70,8 +84,51 @@ class AmvidiaGSDHelper
      */
     public static function getSiteURL()
     {
-        return "https://amvidia.com/";//self::getParams()->get("sitename_url", JURI::root());
+        if (isset(self::$cache['settings'])) return self::$cache['settings']['siteurl'];
+        
+        AmvidiaGSDHelper::ReadSettings();
+        
+        return self::$cache['settings']['siteurl'];// . '.new';
     }
+
+    public static function ReadSettings()
+    {
+    	$data = AmvidiaGSDHelper::ReadMicrodata(self::$path, 'settings');
+    	
+		if ($data === false)
+    	{
+    		$data['sitename'] = 'Amvidia';
+    		$data['sitelogo'] = 'https://amvidia.com/logo.png';
+    		$data['siteurl'] = 'https://amvidia.com/';
+    		//$data[''] = '';
+    	}
+    	self::$cache['settings'] = $data;
+    }
+
+	public static function ReadMicrodata($path, $name)
+	{
+		$filename = $path . '/'. $name . '.txt';
+		if (JFile::exists($filename))
+		{
+			$lines = @file($filename);
+			$data = [];
+			foreach ($lines as $l)
+			{
+				$tmp = explode(':', $l, 2);
+				if (sizeof($tmp) != 2) continue;
+				$key = trim($tmp[0]);
+				$value = trim($tmp[1]); // на всякий случай тоже будем чистить
+				
+				if (isset($data[$key])) // а вдруг дубль ключа? но пока забиваем
+				{
+				}
+
+				$data[$key] = $value;
+			}
+			return $data;
+		}
+		return false;
+	}
 
 
 }
