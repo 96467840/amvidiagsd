@@ -50,46 +50,74 @@ class AmvidiaGSDHelper
     }
 
     /**
+     *  Get settings param
+     *
+     *  @return  string  Site URL
+     */
+    public static function getSetting($name)
+    {
+        if (isset(self::$cache['settings'])) return self::$cache['settings'][$name];
+        
+        AmvidiaGSDHelper::ReadSettings();
+        
+        return self::$cache['settings'][$name];
+    }
+
+    /**
      *  Get website name
      *
      *  @return  string  Site URL
      */
-    public static function getSiteName()
+    /*public static function getHomeName()
+    {
+        if (isset(self::$cache['settings'])) return self::$cache['settings']['homename'];
+        
+        AmvidiaGSDHelper::ReadSettings();
+        
+        return self::$cache['settings']['homename'];
+    }*/
+
+    /**
+     *  Get website name
+     *
+     *  @return  string  Site URL
+     */
+    /*public static function getSiteName()
     {
         if (isset(self::$cache['settings'])) return self::$cache['settings']['sitename'];
         
         AmvidiaGSDHelper::ReadSettings();
         
         return self::$cache['settings']['sitename'];
-    }
+    }*/
     
     /**
      *  Returns the Site Logo URL
      *
      *  @return  string
      */
-    public static function getSiteLogo()
+    /*public static function getSiteLogo()
     {
         if (isset(self::$cache['settings'])) return self::$cache['settings']['sitelogo'];
         
         AmvidiaGSDHelper::ReadSettings();
         
         return self::$cache['settings']['sitelogo'];
-    }
+    }*/
 
     /**
      *  Get website URL
      *
      *  @return  string  Site URL
      */
-    public static function getSiteURL()
+    /*public static function getSiteURL()
     {
         if (isset(self::$cache['settings'])) return self::$cache['settings']['siteurl'];
         
         AmvidiaGSDHelper::ReadSettings();
         
         return self::$cache['settings']['siteurl'];// . '.new';
-    }
+    }*/
 
     public static function ReadSettings()
     {
@@ -102,6 +130,8 @@ class AmvidiaGSDHelper
     	if (!isset($data['sitename'])) $data['sitename'] = 'Amvidia';
     	if (!isset($data['sitelogo'])) $data['sitelogo'] = 'https://amvidia.com/images/amvidia_logo.png';
     	if (!isset($data['siteurl'])) $data['siteurl'] = 'https://amvidia.com/';
+    	if (!isset($data['homename'])) $data['homename'] = $data['sitename']; //'Amvidia main';
+    	if (!isset($data['breadcrumbs_enabled'])) $data['breadcrumbs_enabled'] = '1';
 
     	self::$cache['settings'] = $data;
     }
@@ -153,4 +183,93 @@ class AmvidiaGSDHelper
         return $info;
     }
 
+    /**
+     *  Returns an array with crumbs
+     *
+     *  @return  array
+     */
+    public static function getCrumbs($hometext)
+    {
+        $pathway = JFactory::getApplication()->getPathway();
+        //var_dump($pathway);
+        $items   = $pathway->getPathWay();
+        $menu    = JFactory::getApplication()->getMenu();
+        $lang    = JFactory::getLanguage();
+        $count   = count($items);
+
+        // Look for the home menu
+        if (JLanguageMultilang::isEnabled())
+        {
+            $home = $menu->getDefault($lang->getTag());
+        }
+        else
+        {
+            $home = $menu->getDefault();
+        }
+
+        if (!$count)
+        {
+            return false;
+        }
+
+        // We don't use $items here as it references JPathway properties directly
+        $crumbs = array();
+
+        for ($i = 0; $i < $count; $i++)
+        {
+            $crumbs[$i]       = new stdClass;
+            $crumbs[$i]->name = stripslashes(htmlspecialchars($items[$i]->name, ENT_COMPAT, 'UTF-8'));
+            $crumbs[$i]->link = self::route($items[$i]->link);
+        }
+
+        // Add Home item
+        $item       = new stdClass;
+        $item->name = htmlspecialchars($hometext);
+        $item->link = self::route('index.php?Itemid=' . $home->id);
+        array_unshift($crumbs, $item);
+
+        // Fix last item's missing URL to make Google Markup Tool happy
+        end($crumbs);
+        if (empty($crumbs->link))
+        {
+            $crumbs[key($crumbs)]->link = JURI::current();
+        }
+
+        return $crumbs;
+    }
+
+	/**
+     *  Returns URLs based on the Force SSL global configuration
+     *
+     *  @param   string   $route  The route for which we want a URL
+     *  @param   boolean  $xhtml  If we want the output to be in XHTML
+     *
+     *  @return  string           The absolute url
+     */
+    public static function route($route, $xhtml = true)
+    {
+        $siteSSL = JFactory::getConfig()->get('force_ssl');
+        $sslFlag = 2;
+
+        // the force_ssl value in the global configuration needs
+        // to be 2 for the frontend to also be under HTTPS
+        if (($siteSSL == 2) || (isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'))
+        {
+            $sslFlag = 1;
+        }
+        
+        return JRoute::_($route, $xhtml, $sslFlag);
+    }
+
+    /**
+     *  Determine if the user is viewing the front page
+     *
+     *  @return  boolean
+     */
+    public static function isFrontPage()
+    {
+        $menu = JFactory::getApplication()->getMenu();
+        $lang = JFactory::getLanguage()->getTag();
+        return ($menu->getActive() == $menu->getDefault($lang));
+    }
 }

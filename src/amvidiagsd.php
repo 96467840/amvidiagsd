@@ -89,7 +89,7 @@ class plgSystemAmvidiaGSD extends JPlugin
             $this->getJSONLogo(),
             
             //$this->getCustomCode(),
-            //$this->getJSONBreadcrumbs()
+            $this->getJSONBreadcrumbs()
         );
 
         // Convert data array to string
@@ -121,8 +121,8 @@ class plgSystemAmvidiaGSD extends JPlugin
         // Generate JSON
         return $this->json->setData(array(
             "contentType" => "sitename",
-            "name"        => AmvidiaGSDHelper::getSiteName(),
-            "url"         => AmvidiaGSDHelper::getSiteURL(),
+            "name"        => AmvidiaGSDHelper::getSetting('sitename'),
+            "url"         => AmvidiaGSDHelper::getSetting('siteurl'),
             //"alt"         => $this->params->get("sitename_name_alt")
         ))->generate();
     }
@@ -135,7 +135,7 @@ class plgSystemAmvidiaGSD extends JPlugin
      */
     private function getJSONLogo()
     {
-        if (!$logo = AmvidiaGSDHelper::getSiteLogo())
+        if (!$logo = AmvidiaGSDHelper::getSetting('sitelogo'))
         {
             return;
         }
@@ -143,8 +143,29 @@ class plgSystemAmvidiaGSD extends JPlugin
         // Generate JSON
         return $this->json->setData(array(
             "contentType" => "logo",
-            "url"         => AmvidiaGSDHelper::getSiteURL(),
+            "url"         => AmvidiaGSDHelper::getSetting('siteurl'),
             "logo"        => $logo
+        ))->generate();
+    }
+
+    /**
+     *  Returns Breadcrumbs structured data markup
+     *  https://developers.google.com/structured-data/breadcrumbs
+     *
+     *  @return  string
+     */
+    private function getJSONBreadcrumbs()
+    {
+        // Skip on homepage 
+        if (!AmvidiaGSDHelper::getSetting("breadcrumbs_enabled") || AmvidiaGSDHelper::isFrontPage())
+        {
+            return;
+        }
+
+        // Generate JSON
+        return $this->json->setData(array(
+            "contentType" => "breadcrumbs",
+            "crumbs"      => AmvidiaGSDHelper::getCrumbs(AmvidiaGSDHelper::getSetting('homename'))
         ))->generate();
     }
 
@@ -161,10 +182,10 @@ class plgSystemAmvidiaGSD extends JPlugin
 
         // Load component helpers
         $path = __DIR__;
-        if (!JFolder::exists($path))
+        /*if (!JFolder::exists($path))
         {
             return;
-        }
+        }*/
 
         require_once $path . '/helper.php';
         require_once $path . '/json.php';
