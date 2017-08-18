@@ -11,6 +11,7 @@
  */
 
 defined('_JEXEC') or die('Restricted Access');
+use Joomla\Registry\Registry;
 
 // docs
 // https://docs.joomla.org/How_to_use_the_filesystem_package
@@ -184,6 +185,34 @@ class AmvidiaGSDHelper
     }
 
     /**
+     *  Get article's data
+     *
+     *  @return  array
+     */
+    public function getArticle()
+    {
+        // Load current item via model
+        $model = JModelLegacy::getInstance('Article', 'ContentModel');
+        $item  = $model->getItem();
+
+        // Image
+        $image = new Registry($item->images);
+
+        // Array data
+        return array(
+            "headline"    => $item->title,
+            "description" => isset($item->introtext) && !empty($item->introtext) ? $item->introtext : $item->fulltext,
+            "image"       => $image->get("image_intro") ?: $image->get("image_fulltext"),
+            "created_by"  => $item->created_by,
+            "created"     => $item->created,
+            "modified"    => $item->modified,
+            "publish_up"  => $item->publish_up,
+            "ratingValue" => $item->rating,
+            "reviewCount" => $item->rating_count
+        );
+    }
+
+    /**
      *  Returns an array with crumbs
      *
      *  @return  array
@@ -193,6 +222,7 @@ class AmvidiaGSDHelper
         $pathway = JFactory::getApplication()->getPathway();
         //var_dump($pathway);
         $items   = $pathway->getPathWay();
+        //var_dump($items);
         $menu    = JFactory::getApplication()->getMenu();
         $lang    = JFactory::getLanguage();
         $count   = count($items);
