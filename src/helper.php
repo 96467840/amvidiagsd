@@ -100,7 +100,7 @@ class AmvidiaGSDHelper
     		$data = [];
     	}
     	if (!isset($data['sitename'])) $data['sitename'] = 'Amvidia';
-    	if (!isset($data['sitelogo'])) $data['sitelogo'] = 'https://amvidia.com/logo.png';
+    	if (!isset($data['sitelogo'])) $data['sitelogo'] = 'https://amvidia.com/images/amvidia_logo.png';
     	if (!isset($data['siteurl'])) $data['siteurl'] = 'https://amvidia.com/';
 
     	self::$cache['settings'] = $data;
