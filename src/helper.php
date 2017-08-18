@@ -131,5 +131,26 @@ class AmvidiaGSDHelper
 		return false;
 	}
 
+    /**
+     *  Returns image width and height
+     *
+     *  @param   string  $image  The URL of the image2wbmp(image)
+     *
+     *  @return  array
+     */
+    public static function getImageSize($image)
+    {
+        if (!ini_get('allow_url_fopen') || !function_exists('getimagesize'))
+        {
+            return array("width" => 0, "height" => 0);
+        }
+
+        $imageSize = $image ? getimagesize($image) : array(0, 0);
+
+        $info["width"]  = $imageSize[0];
+        $info["height"] = $imageSize[1];
+
+        return $info;
+    }
 
 }
