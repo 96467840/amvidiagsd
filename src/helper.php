@@ -151,8 +151,8 @@ class AmvidiaGSDHelper
 				if (substr($l, 0, 1) == '#') continue;
 				$tmp = explode(':', $l, 2);
 				if (sizeof($tmp) != 2) continue;
-				$key = str_replace(array('"', '\\'), array('\\"', ''), trim($tmp[0]));
-				$value = str_replace(array('"', '\\'), array('\\"', '\\\\'), trim($tmp[1])); // на всякий случай тоже будем чистить
+				$key = str_replace(array('\\', '"'), array('', '\\"'), trim($tmp[0]));
+				$value = str_replace(array('\\', '"'), array('\\\\', '\\"'), trim($tmp[1])); // на всякий случай тоже будем чистить
 
 				if (isset($data[$key])) // а вдруг дубль ключа? но пока забиваем
 				{
