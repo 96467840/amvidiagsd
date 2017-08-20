@@ -70,7 +70,7 @@ class AmvidiaGSDHelper
     	
 		if ($data === false)
     	{
-    		$data = [];
+    		$data = array();
     	}
     	if (!isset($data['sitename'])) $data['sitename'] = 'Amvidia';
     	if (!isset($data['sitelogo'])) $data['sitelogo'] = 'https://amvidia.com/images/amvidia_logo.png';
@@ -90,7 +90,7 @@ class AmvidiaGSDHelper
 		if (JFile::exists($filename))
 		{
 			$lines = @file($filename);
-			$data = [];
+			$data = array();
 			foreach ($lines as $l)
 			{
 				$l = trim($l);
@@ -159,7 +159,7 @@ class AmvidiaGSDHelper
     {
     	$overrides = self::ReadMicrodata(self::$path . '/articles/', 'm.' . $menu->id);
     	if (!$overrides) $overrides = self::ReadMicrodata(self::$path . '/articles/', 'a.' . $item->id);
-    	if (!$overrides) $overrides = []; // чтоб не делать проверку на нул
+    	if (!$overrides) $overrides = array(); // чтоб не делать проверку на нул
 
 		/*echo '<pre>';
 		var_dump($item);
