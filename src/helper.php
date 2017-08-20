@@ -98,7 +98,7 @@ class AmvidiaGSDHelper
 				$tmp = explode(':', $l, 2);
 				if (sizeof($tmp) != 2) continue;
 				$key = str_replace(array('\\', '"'), array('', '\\"'), trim($tmp[0]));
-				$value = str_replace(array('\\', '"'), array('\\\\', '\\"'), trim($tmp[1])); // на всякий случай тоже будем чистить
+				$value = self::prepareVal($tmp[1]);//str_replace(array('\\', '"'), array('\\\\', '\\"'), trim($tmp[1])); // на всякий случай тоже будем чистить
 
 				if (isset($data[$key])) // а вдруг дубль ключа? но пока забиваем
 				{
@@ -145,9 +145,17 @@ class AmvidiaGSDHelper
 
     public static function imageURL($img)
     {
+    	if (!$img) return $img;
 		if (substr($img, 0, 8) == 'https://') return $img;
 		if (substr($img, 0, 7) == 'http://') return $img;
     	return self::proto() . $_SERVER['SERVER_NAME'] . '/' . $img;
+    }
+
+    public static function prepareVal($val, $clearHtml = false)
+    {
+    	$res = str_replace(array('\\', '"'), array('\\\\', '\\"'), trim($clearHtml ? strip_tags($val) : $val));
+    	$res = preg_replace('/\{[^\}]*\}/', '', $res);
+    	return $res;
     }
 
     /**
@@ -174,16 +182,16 @@ class AmvidiaGSDHelper
         // Array data
         $data = array(
 	        "contentType" => "article",
-	        "url"         => isset($overrides['url']) ? $overrides['url'] : self::proto() . $_SERVER['SERVER_NAME'] . JRoute::_(ContentHelperRoute::getArticleRoute($item->slug, $item->catid, $item->language)),
-            "title"       => isset($overrides['title']) ? $overrides['title'] : $item->title,
-            "description" => isset($overrides['description']) ? $overrides['description'] : (isset($item->introtext) && !empty($item->introtext) ? $item->introtext : $item->fulltext),
-            "image"       => isset($overrides['image']) ? $overrides['image'] : self::imageURL($image->get("image_intro") ?: $image->get("image_fulltext")),
+	        "url"         => self::prepareVal(isset($overrides['url']) ? $overrides['url'] : self::proto() . $_SERVER['SERVER_NAME'] . JRoute::_(ContentHelperRoute::getArticleRoute($item->slug, $item->catid, $item->language))),
+            "title"       => self::prepareVal(isset($overrides['title']) ? $overrides['title'] : $item->title),
+            "description" => self::prepareVal(isset($overrides['description']) ? $overrides['description'] : (isset($item->introtext) && !empty($item->introtext) ? $item->introtext : $item->fulltext), true),
+            "image"       => self::prepareVal(isset($overrides['image']) ? $overrides['image'] : self::imageURL($image->get("image_intro") ?: $image->get("image_fulltext"))),
             //"created_by"  => $item->created_by,
-            "dateCreated"     => isset($overrides['created']) ? $overrides['created'] : $item->created,
-            "dateModified"    => isset($overrides['modified']) ? $overrides['modified'] : $item->modified,
-            "datePublished"  => isset($overrides['published']) ? $overrides['published'] : $item->publish_up,
+            "dateCreated"     => self::prepareVal(isset($overrides['created']) ? $overrides['created'] : $item->created),
+            "dateModified"    => self::prepareVal(isset($overrides['modified']) ? $overrides['modified'] : $item->modified),
+            "datePublished"  => self::prepareVal(isset($overrides['published']) ? $overrides['published'] : $item->publish_up),
             
-            "authorName"     => isset($overrides['author']) ? $overrides['author'] : $item->created_by_alias,
+            "authorName"     => self::prepareVal(isset($overrides['author']) ? $overrides['author'] : $item->created_by_alias),
 
             //"ratingValue" => $item->rating,
             //"reviewCount" => $item->rating_count
