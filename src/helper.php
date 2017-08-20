@@ -133,6 +133,7 @@ class AmvidiaGSDHelper
     	if (!isset($data['siteurl'])) $data['siteurl'] = 'https://amvidia.com/';
     	if (!isset($data['homename'])) $data['homename'] = $data['sitename']; //'Amvidia main';
     	if (!isset($data['breadcrumbs_enabled'])) $data['breadcrumbs_enabled'] = '1';
+    	if (!isset($data['articles_enabled'])) $data['articles_enabled'] = '1';
 
     	self::$cache['settings'] = $data;
     }
@@ -146,6 +147,8 @@ class AmvidiaGSDHelper
 			$data = [];
 			foreach ($lines as $l)
 			{
+				$l = trim($l);
+				if (substr($l, 0, 1) == '#') continue;
 				$tmp = explode(':', $l, 2);
 				if (sizeof($tmp) != 2) continue;
 				$key = trim($tmp[0]);

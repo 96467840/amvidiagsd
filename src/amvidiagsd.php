@@ -104,9 +104,9 @@ class plgSystemAmvidiaGSD extends JPlugin
 
         // Add final markup to the document
         JFactory::getDocument()->addCustomTag('
-            <!-- Start: ' . JText::_("GSD") . ' -->
+            <!-- Start: ' . JText::_("AmvidiaGSD") . ' -->
             ' . $markup . '
-            <!-- End: ' . JText::_("GSD") . ' -->
+            <!-- End: ' . JText::_("AmvidiaGSD") . ' -->
         ');
     }
 
@@ -119,6 +119,11 @@ class plgSystemAmvidiaGSD extends JPlugin
      */
     private function getJSONSiteName()
     {
+		if (!AmvidiaGSDHelper::isFrontPage())
+		{
+			return;
+		}
+
         // Generate JSON
         return $this->json->setData(array(
             "contentType" => "sitename",
@@ -172,6 +177,11 @@ class plgSystemAmvidiaGSD extends JPlugin
 
     private function getJSONArticle()
     {
+        if (!AmvidiaGSDHelper::getSetting("articles_enabled"))
+        {
+            return;
+        }
+
         // Generate JSON
         return $this->json->setData(array(
             "contentType" => "article",

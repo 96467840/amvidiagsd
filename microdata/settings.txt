@@ -1,0 +1,16 @@
+﻿# Comment sample
+# Comments can be only of this kind
+   # Also comment
+
+sitename:	Amvidia
+sitelogo:	https://amvidia.com/images/amvidia_logo.png
+siteurl:	https://amvidia.com
+
+# Breadcrumbs
+homename:				Main
+# 1 | 0
+breadcrumbs_enabled:	0
+
+# Articles
+# 1 | 0
+articles_enabled:	0
