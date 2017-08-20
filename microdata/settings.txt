@@ -15,3 +15,4 @@ breadcrumbs_enabled:	0
 # Articles
 # 1 | 0
 articles_enabled:	0
+#articles_defaultauthor: Test Author

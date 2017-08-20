@@ -203,15 +203,19 @@ class AmvidiaGSDJSON
                     "@id": "' . $this->data->get("url") . '"
                 },
                 "headline": "' . $this->data->get("title") . '",
-                "description": "' . $this->data->get("description") . '",
+                "description": "' . $this->data->get("description") . '"
+                ';
+
+        if ($this->data->get("image"))
+        {
+            $json[] = '
                 "image": {
                     "@type": "ImageObject",
                     "url": "' . $this->data->get("image") . '",
-                    "height": 800,
-                    "width": 800
+                    "height": ' . $this->data->get("imageHeight") . ',
+                    "width":  ' . $this->data->get("imageWidth"). '
                 }';
-
-        
+        }
 
         // Author
         if ($this->data->get("authorName"))
@@ -224,7 +228,7 @@ class AmvidiaGSDJSON
         }
 
         // Publisher
-        if ($this->data->get("publisherName"))
+        /*if ($this->data->get("publisherName"))
         {
             $json[] = '
                 "publisher": {
@@ -237,7 +241,7 @@ class AmvidiaGSDJSON
                         "height": 60
                     }
                 }';
-        }
+        }*/
 
         $json[] = '
                 "datePublished" : "' . $this->data->get("datePublished") . '",

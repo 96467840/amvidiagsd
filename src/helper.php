@@ -59,70 +59,14 @@ class AmvidiaGSDHelper
     {
         if (isset(self::$cache['settings'])) return self::$cache['settings'][$name];
         
-        AmvidiaGSDHelper::ReadSettings();
+        self::ReadSettings();
         
         return self::$cache['settings'][$name];
     }
 
-    /**
-     *  Get website name
-     *
-     *  @return  string  Site URL
-     */
-    /*public static function getHomeName()
-    {
-        if (isset(self::$cache['settings'])) return self::$cache['settings']['homename'];
-        
-        AmvidiaGSDHelper::ReadSettings();
-        
-        return self::$cache['settings']['homename'];
-    }*/
-
-    /**
-     *  Get website name
-     *
-     *  @return  string  Site URL
-     */
-    /*public static function getSiteName()
-    {
-        if (isset(self::$cache['settings'])) return self::$cache['settings']['sitename'];
-        
-        AmvidiaGSDHelper::ReadSettings();
-        
-        return self::$cache['settings']['sitename'];
-    }*/
-    
-    /**
-     *  Returns the Site Logo URL
-     *
-     *  @return  string
-     */
-    /*public static function getSiteLogo()
-    {
-        if (isset(self::$cache['settings'])) return self::$cache['settings']['sitelogo'];
-        
-        AmvidiaGSDHelper::ReadSettings();
-        
-        return self::$cache['settings']['sitelogo'];
-    }*/
-
-    /**
-     *  Get website URL
-     *
-     *  @return  string  Site URL
-     */
-    /*public static function getSiteURL()
-    {
-        if (isset(self::$cache['settings'])) return self::$cache['settings']['siteurl'];
-        
-        AmvidiaGSDHelper::ReadSettings();
-        
-        return self::$cache['settings']['siteurl'];// . '.new';
-    }*/
-
     public static function ReadSettings()
     {
-    	$data = AmvidiaGSDHelper::ReadMicrodata(self::$path, 'settings');
+    	$data = self::ReadMicrodata(self::$path, 'settings');
     	
 		if ($data === false)
     	{
@@ -132,8 +76,10 @@ class AmvidiaGSDHelper
     	if (!isset($data['sitelogo'])) $data['sitelogo'] = 'https://amvidia.com/images/amvidia_logo.png';
     	if (!isset($data['siteurl'])) $data['siteurl'] = 'https://amvidia.com/';
     	if (!isset($data['homename'])) $data['homename'] = $data['sitename']; //'Amvidia main';
-    	if (!isset($data['breadcrumbs_enabled'])) $data['breadcrumbs_enabled'] = '1';
-    	if (!isset($data['articles_enabled'])) $data['articles_enabled'] = '1';
+    	if (!isset($data['breadcrumbs_enabled'])) $data['breadcrumbs_enabled'] = '0';
+    	if (!isset($data['articles_enabled'])) $data['articles_enabled'] = '0';
+    	// нет значения по умолчанию
+    	//if (!isset($data['articles_defaultauthor'])) $data['articles_defaultauthor'] = '';
 
     	self::$cache['settings'] = $data;
     }
@@ -187,32 +133,75 @@ class AmvidiaGSDHelper
         return $info;
     }
 
+    public static function proto()
+    {
+    	$proto = 'http://';
+    	if (isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+    	{
+    		$proto = 'https://';
+    	}
+    	return $proto;
+    }
+
+    public static function imageURL($img)
+    {
+		if (substr($img, 0, 8) == 'https://') return $img;
+		if (substr($img, 0, 7) == 'http://') return $img;
+    	return self::proto() . $_SERVER['SERVER_NAME'] . '/' . $img;
+    }
+
     /**
      *  Get article's data
      *
      *  @return  array
      */
-    public function getArticle()
+    public static function getArticle(&$item, &$menu)
     {
-        // Load current item via model
-        $model = JModelLegacy::getInstance('Article', 'ContentModel');
-        $item  = $model->getItem();
+    	$overrides = self::ReadMicrodata(self::$path . '/articles/', 'm.' . $menu->id);
+    	if (!$overrides) $overrides = self::ReadMicrodata(self::$path . '/articles/', 'a.' . $item->id);
+    	if (!$overrides) $overrides = []; // чтоб не делать проверку на нул
 
-        // Image
+		/*echo '<pre>';
+		var_dump($item);
+		echo '<pre>';/**/
+
         $image = new Registry($item->images);
 
+		/*echo '<pre>';
+		var_dump($image->get("image_intro"));
+		echo '<pre>';/**/
+
         // Array data
-        return array(
-            "headline"    => $item->title,
-            "description" => isset($item->introtext) && !empty($item->introtext) ? $item->introtext : $item->fulltext,
-            "image"       => $image->get("image_intro") ?: $image->get("image_fulltext"),
-            "created_by"  => $item->created_by,
-            "created"     => $item->created,
-            "modified"    => $item->modified,
-            "publish_up"  => $item->publish_up,
-            "ratingValue" => $item->rating,
-            "reviewCount" => $item->rating_count
+        $data = array(
+	        "contentType" => "article",
+	        "url"         => isset($overrides['url']) ? $overrides['url'] : self::proto() . $_SERVER['SERVER_NAME'] . JRoute::_(ContentHelperRoute::getArticleRoute($item->slug, $item->catid, $item->language)),
+            "title"       => isset($overrides['title']) ? $overrides['title'] : $item->title,
+            "description" => isset($overrides['description']) ? $overrides['description'] : (isset($item->introtext) && !empty($item->introtext) ? $item->introtext : $item->fulltext),
+            "image"       => isset($overrides['image']) ? $overrides['image'] : self::imageURL($image->get("image_intro") ?: $image->get("image_fulltext")),
+            //"created_by"  => $item->created_by,
+            "dateCreated"     => isset($overrides['created']) ? $overrides['created'] : $item->created,
+            "dateModified"    => isset($overrides['modified']) ? $overrides['modified'] : $item->modified,
+            "datePublished"  => isset($overrides['published']) ? $overrides['published'] : $item->publish_up,
+            
+            "authorName"     => isset($overrides['author']) ? $overrides['author'] : $item->created_by_alias,
+
+            //"ratingValue" => $item->rating,
+            //"reviewCount" => $item->rating_count
         );
+		if ($data['image'])
+		{
+			$size = self::getImageSize($data['image']);
+			if ($size['width'] > 0 && $size['height'] > 0)
+			{
+				$data['imageWidth'] = $size['width'];
+				$data['imageHeight'] = $size['height'];
+			}
+			else
+			{
+				unset($data['image']);
+			}
+		}/**/
+        return $data;
     }
 
     /**
@@ -305,4 +294,11 @@ class AmvidiaGSDHelper
         $lang = JFactory::getLanguage()->getTag();
         return ($menu->getActive() == $menu->getDefault($lang));
     }
+
+    public static function getCurrentMenuItem()
+    {
+        $menu = JFactory::getApplication()->getMenu();
+        return $menu->getActive();
+    }
+
 }
