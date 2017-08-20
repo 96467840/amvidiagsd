@@ -2,7 +2,8 @@
 # Comments can be only of this kind
    # Also comment
 
-sitename:	Amvidia
+sitename:	"Amvidia"
+sitealtname: Sample of \' sadf 
 sitelogo:	https://amvidia.com/images/amvidia_logo.png
 siteurl:	https://amvidia.com
 

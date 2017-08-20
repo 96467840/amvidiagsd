@@ -129,7 +129,7 @@ class plgSystemAmvidiaGSD extends JPlugin
             "contentType" => "sitename",
             "name"        => AmvidiaGSDHelper::getSetting('sitename'),
             "url"         => AmvidiaGSDHelper::getSetting('siteurl'),
-            //"alt"         => $this->params->get("sitename_name_alt")
+            "alt"         => AmvidiaGSDHelper::getSetting('sitealtname')
         ))->generate();
     }
 
