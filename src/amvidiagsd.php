@@ -120,11 +120,11 @@ class plgSystemAmvidiaGSD extends JPlugin
         }
 
         // Add final markup to the document
-        JFactory::getDocument()->addCustomTag('
-            <!-- Start: ' . JText::_("AmvidiaGSD") . ' -->
-            ' . $markup . '
-            <!-- End: ' . JText::_("AmvidiaGSD") . ' -->
-        ');
+        JFactory::getDocument()->addCustomTag( ''
+        //. '<!-- Start: ' . JText::_("AmvidiaGSD") . ' -->' 
+        . $markup 
+        //. '<!-- End: ' . JText::_("AmvidiaGSD") . ' -->'
+        );
 	}
 
     /**
@@ -162,11 +162,11 @@ class plgSystemAmvidiaGSD extends JPlugin
         }
 
         // Add final markup to the document
-        JFactory::getDocument()->addCustomTag('
-            <!-- Start: ' . JText::_("AmvidiaGSD") . ' -->
-            ' . $markup . '
-            <!-- End: ' . JText::_("AmvidiaGSD") . ' -->
-        ');
+        JFactory::getDocument()->addCustomTag( ''
+        //. '<!-- Start: ' . JText::_("AmvidiaGSD") . ' -->' 
+        . $markup 
+        //. '<!-- End: ' . JText::_("AmvidiaGSD") . ' -->'
+        );
     }
 
 

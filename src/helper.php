@@ -57,11 +57,11 @@ class AmvidiaGSDHelper
      */
     public static function getSetting($name)
     {
-        if (isset(self::$cache['settings'])) return self::$cache['settings'][$name];
-        
+        if (isset(self::$cache['settings'])) return isset(self::$cache['settings'][$name]) ? self::$cache['settings'][$name] : null;
+
         self::ReadSettings();
         
-        return self::$cache['settings'][$name];
+        return isset(self::$cache['settings'][$name]) ? self::$cache['settings'][$name] : null;
     }
 
     public static function ReadSettings()
