@@ -92,7 +92,7 @@ class plgSystemAmvidiaGSD extends JPlugin
 		if (($context == 'com_content.article') && ($view == 'article'))
 		{
 			//$menu = $this->getCurrentMenuItem();
-			$this->ArticleGSD($row, $params);
+			$this->ArticleGSD($row, $this->params);
 		}
 	}
 
