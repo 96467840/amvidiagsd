@@ -185,7 +185,9 @@ class AmvidiaGSDHelper
 	        "url"         => self::prepareVal(isset($overrides['url']) ? $overrides['url'] : self::proto() . $_SERVER['SERVER_NAME'] . JRoute::_(ContentHelperRoute::getArticleRoute($item->slug, $item->catid, $item->language))),
             "title"       => self::prepareVal(isset($overrides['title']) ? $overrides['title'] : $item->title),
             "description" => self::prepareVal(isset($overrides['description']) ? $overrides['description'] : (isset($item->introtext) && !empty($item->introtext) ? $item->introtext : $item->fulltext), true),
-            "image"       => self::prepareVal(isset($overrides['image']) ? $overrides['image'] : self::imageURL($image->get("image_intro") ?: $image->get("image_fulltext"))),
+            "image"       => self::prepareVal(
+                isset($overrides['image']) ? self::imageURL($overrides['image']) : self::imageURL($image->get("image_intro") ?: $image->get("image_fulltext"))
+            ),
             //"created_by"  => $item->created_by,
             "dateCreated"     => self::prepareVal(isset($overrides['created']) ? $overrides['created'] : $item->created),
             "dateModified"    => self::prepareVal(isset($overrides['modified']) ? $overrides['modified'] : $item->modified),
