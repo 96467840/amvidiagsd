@@ -11,6 +11,7 @@
 	<files>
 		<filename plugin="amvidiagsd">amvidiagsd.php</filename>
 		<filename>helper.php</filename>
+		<filename>urlhelper.php</filename>
 		<filename>json.php</filename>
 	</files>
 	<config>

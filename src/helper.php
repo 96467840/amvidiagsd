@@ -163,7 +163,7 @@ class AmvidiaGSDHelper
      *
      *  @return  array
      */
-    public static function getArticle(&$item, &$menu)
+    public static function getArticle(&$item, &$menu, &$params)
     {
     	$overrides = self::ReadMicrodata(self::$path . '/articles/', 'm.' . $menu->id);
     	if (!$overrides) $overrides = self::ReadMicrodata(self::$path . '/articles/', 'a.' . $item->id);
@@ -184,7 +184,12 @@ class AmvidiaGSDHelper
         // Array data
         $data = array(
 	        "contentType" => "article",
-	        "url"         => self::prepareVal(isset($overrides['url']) ? $overrides['url'] : self::proto() . $_SERVER['SERVER_NAME'] . JRoute::_(ContentHelperRoute::getArticleRoute($item->slug, $item->catid, $item->language))),
+	        "url"         => self::prepareVal(
+                isset($overrides['url']) ? 
+                    $overrides['url'] : 
+                    //self::proto() . $_SERVER['SERVER_NAME'] . JRoute::_(ContentHelperRoute::getArticleRoute($item->slug, $item->catid, $item->language))
+                    AmvidiaUrlHelper::getCanonical($params)
+            ),
             "title"       => self::prepareVal(isset($overrides['title']) ? $overrides['title'] : $item->title),
             "description" => self::prepareVal(
                 isset($overrides['description']) ? 

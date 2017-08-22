@@ -92,11 +92,11 @@ class plgSystemAmvidiaGSD extends JPlugin
 		if (($context == 'com_content.article') && ($view == 'article'))
 		{
 			//$menu = $this->getCurrentMenuItem();
-			$this->ArticleGSD($row);
+			$this->ArticleGSD($row, $params);
 		}
 	}
 
-    private function ArticleGSD(&$row)
+    private function ArticleGSD(&$row, &$params)
     {
         // Load Helper
         if (!$this->getHelper())
@@ -107,7 +107,7 @@ class plgSystemAmvidiaGSD extends JPlugin
         //$menu = $this->getCurrentMenuItem();
 
         $data = array(
-            $this->getJSONArticle($row)
+            $this->getJSONArticle($row, $params)
         );
 
         // Convert data array to string
@@ -234,7 +234,7 @@ class plgSystemAmvidiaGSD extends JPlugin
         ))->generate();
     }
 
-    private function getJSONArticle(&$row)
+    private function getJSONArticle(&$row, &$params)
     {
         if (!AmvidiaGSDHelper::getSetting("articles_enabled"))
         {
@@ -245,7 +245,7 @@ class plgSystemAmvidiaGSD extends JPlugin
 
         // Generate JSON
         return $this->json->setData(
-            AmvidiaGSDHelper::getArticle($row, $menu)
+            AmvidiaGSDHelper::getArticle($row, $menu, $params)
         )->generate();
     }
 
@@ -280,6 +280,7 @@ class plgSystemAmvidiaGSD extends JPlugin
         }*/
 
         require_once $path . '/helper.php';
+        require_once $path . '/urlhelper.php';
         require_once $path . '/json.php';
 
         return true;
