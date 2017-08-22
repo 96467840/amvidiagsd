@@ -222,7 +222,12 @@ class AmvidiaGSDJSON
         {
             $json[] = '
                 "author": {
-                    "@type": "Person",
+                    "@type": "Organization",
+                    "name": "' . $this->data->get("authorName") . '"
+                }';
+            $json[] = '
+                "publisher": {
+                    "@type": "Organization",
                     "name": "' . $this->data->get("authorName") . '"
                 }';
         }
