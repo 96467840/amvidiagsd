@@ -169,7 +169,7 @@ class AmvidiaGSDHelper
     	if (!$overrides) $overrides = self::ReadMicrodata(self::$path . '/articles/', 'a.' . $item->id);
     	if (!$overrides) $overrides = array(); // чтоб не делать проверку на нул
 
-        echo 'intro='. $item->introtext;
+        //echo 'intro='. $item->introtext;
         //echo '---->' . $item->metadesc;
 		/*echo '<pre>';
 		var_dump($item);
