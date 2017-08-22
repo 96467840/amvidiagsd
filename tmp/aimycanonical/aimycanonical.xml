@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extension version="3.0" type="plugin" group="system" method="upgrade">
+    <name>System - Aimy Canonical (PRO)</name>
+    <creationDate>2016-06-22</creationDate>
+    <author>Aimy Extensions (Lingua-Systems Software GmbH)</author>
+    <authorEmail>info@aimy-extensions.com</authorEmail>
+    <authorUrl>http://www.aimy-extensions.com/</authorUrl>
+    <copyright>2013-2016 Aimy Extensions, Lingua-Systems Software GmbH</copyright>
+    <license>GNU General Public License (GPL) v2</license>
+    <version>3.13.1</version>
+    <description>Canonical Link Tags for your Website (PRO)</description>
+    <scriptfile>install-hints.php</scriptfile>
+    <files>
+        <filename plugin="aimycanonical">aimycanonical.php</filename>
+        <filename>index.html</filename>
+    </files>
+    <media destination="plg_aimycanonical" folder="media">
+        <filename>aimy-logo_340x327.png</filename>
+        <filename>index.html</filename>
+    </media>
+    <languages>
+        <language tag="de-DE">i18n/de-DE.plg_system_aimycanonical.ini</language>
+        <language tag="en-GB">i18n/en-GB.plg_system_aimycanonical.ini</language>
+        <language tag="es-ES">i18n/es-ES.plg_system_aimycanonical.ini</language>
+        <language tag="fa-IR">i18n/fa-IR.plg_system_aimycanonical.ini</language>
+        <language tag="fr-FR">i18n/fr-FR.plg_system_aimycanonical.ini</language>
+        <language tag="hu-HU">i18n/hu-HU.plg_system_aimycanonical.ini</language>
+        <language tag="it-IT">i18n/it-IT.plg_system_aimycanonical.ini</language>
+        <language tag="nl-NL">i18n/nl-NL.plg_system_aimycanonical.ini</language>
+        <language tag="pl-PL">i18n/pl-PL.plg_system_aimycanonical.ini</language>
+        <language tag="pt-BR">i18n/pt-BR.plg_system_aimycanonical.ini</language>
+        <language tag="sk-SK">i18n/sk-SK.plg_system_aimycanonical.ini</language>
+    </languages>
+    <config>
+      <fields name="params">
+        <fieldset name="basic">
+          <field name="domain" type="text" default=""
+            class="inputbox"
+            label="AIMY_CNCL_DOMAIN_LBL"
+            description="AIMY_CNCL_DOMAIN_DSC" />
+          <field name="protocol"
+            type="radio" default="http"
+            class="btn-group btn-group-yesno"
+            labelclass="control-group"
+            required="true"
+            label="AIMY_CNCL_PROTOCOL_LBL"
+            description="AIMY_CNCL_PROTOCOL_DSC">
+              <option value="http">http</option>
+              <option value="https">https</option>
+          </field>
+          <field name="remove_query_string"
+            type="radio" default="0"
+            class="btn-group btn-group-yesno"
+            labelclass="control-group"
+            required="true"
+            label="AIMY_CNCL_REMOVE_QUERY_STRING_LBL"
+            description="AIMY_CNCL_REMOVE_QUERY_STRING_DSC">
+              <option value="1">JYES</option>
+              <option value="0">JNO</option>
+          </field>
+          <field name="cleanup_head"
+            type="radio" default="0"
+            class="btn-group btn-group-yesno"
+            labelclass="control-group"
+            required="true"
+            label="AIMY_CNCL_CLEANUP_HEAD_LBL"
+            description="AIMY_CNCL_CLEANUP_HEAD_DSC">
+              <option value="1">JYES</option>
+              <option value="0">JNO</option>
+          </field>
+          <field name="use_docbase"
+            type="radio" default="0"
+            class="btn-group btn-group-yesno"
+            labelclass="control-group"
+            required="true"
+            label="AIMY_CNCL_USE_DOCBASE_LBL"
+            description="AIMY_CNCL_USE_DOCBASE_DSC">
+              <option value="1">JYES</option>
+              <option value="0">JNO</option>
+          </field>
+        </fieldset>
+      </fields>
+    </config>
+    <updateservers>
+      <server
+        type="extension"
+        priority="1"
+        name="Aimy Canonical PRO Update Server">http://updates.aimy-extensions.com/joomla/plg_aimycanonical-pro.xml</server>
+    </updateservers>
+</extension>
