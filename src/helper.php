@@ -169,6 +169,8 @@ class AmvidiaGSDHelper
     	if (!$overrides) $overrides = self::ReadMicrodata(self::$path . '/articles/', 'a.' . $item->id);
     	if (!$overrides) $overrides = array(); // чтоб не делать проверку на нул
 
+        echo 'intro='. $item->introtext;
+        //echo '---->' . $item->metadesc;
 		/*echo '<pre>';
 		var_dump($item);
 		echo '<pre>';/**/
@@ -184,7 +186,16 @@ class AmvidiaGSDHelper
 	        "contentType" => "article",
 	        "url"         => self::prepareVal(isset($overrides['url']) ? $overrides['url'] : self::proto() . $_SERVER['SERVER_NAME'] . JRoute::_(ContentHelperRoute::getArticleRoute($item->slug, $item->catid, $item->language))),
             "title"       => self::prepareVal(isset($overrides['title']) ? $overrides['title'] : $item->title),
-            "description" => self::prepareVal(isset($overrides['description']) ? $overrides['description'] : (isset($item->introtext) && !empty($item->introtext) ? $item->introtext : $item->fulltext), true),
+            "description" => self::prepareVal(
+                isset($overrides['description']) ? 
+                    $overrides['description'] : 
+                    (
+                        isset($item->metadesc) && !empty($item->metadesc) ? 
+                        $item->metadesc : 
+                        (isset($item->introtext) && !empty($item->introtext) ? $item->introtext : $item->fulltext)
+                    )
+                , true
+            ),
             "image"       => self::prepareVal(
                 isset($overrides['image']) ? self::imageURL($overrides['image']) : self::imageURL($image->get("image_intro") ?: $image->get("image_fulltext"))
             ),
@@ -193,7 +204,11 @@ class AmvidiaGSDHelper
             "dateModified"    => self::prepareVal(isset($overrides['modified']) ? $overrides['modified'] : $item->modified),
             "datePublished"  => self::prepareVal(isset($overrides['published']) ? $overrides['published'] : $item->publish_up),
             
-            "authorName"     => self::prepareVal(isset($overrides['author']) ? $overrides['author'] : $item->created_by_alias),
+            "authorName"     => self::prepareVal(
+                isset($overrides['author']) ? 
+                    $overrides['author'] : 
+                    ($item->created_by_alias ? $item->created_by_alias : $item->author)
+            ),
 
             //"ratingValue" => $item->rating,
             //"reviewCount" => $item->rating_count
