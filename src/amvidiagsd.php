@@ -149,7 +149,8 @@ class plgSystemAmvidiaGSD extends JPlugin
             $this->getJSONLogo(),
             
             $this->getJSONBreadcrumbs(),
-            $this->getCustomCode(),
+            $this->getJSONSoftware($this->params),
+            //$this->getCustomCode(),
         );
 
         // Convert data array to string
@@ -247,6 +248,16 @@ class plgSystemAmvidiaGSD extends JPlugin
         return $this->json->setData(
             AmvidiaGSDHelper::getArticle($row, $menu, $params)
         )->generate();
+    }
+
+    private function getJSONSoftware(&$params)
+    {
+		$menu = $this->getCurrentMenuItem();
+
+        // Generate JSON
+        $s = AmvidiaGSDHelper::getSoftware($menu, $params);
+        if (!$s) return;
+        return $this->json->setData($s)->generate();
     }
 
 	/**

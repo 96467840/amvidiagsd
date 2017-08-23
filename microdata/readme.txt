@@ -29,4 +29,16 @@
 	2.6. "modified"    => измения
 	2.7. "published"   => публикации
 	2.8. "author"      => имя автора (по умолчанию берем из "author alias" created_by_alias)
+3. Software
+	нужно создать файл в папке microdata/software
+	Именование файлов тока так "m.{menu ID}.txt" 
+	Названия ключей:
+
+	name: name
+	os: operatingSystem
+	category: applicationCategory
+	ratingvalue:4.6
+	ratingcount:100500
+	price:200
+	currency: USD
  

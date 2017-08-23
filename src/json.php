@@ -83,16 +83,16 @@ class AmvidiaGSDJSON
         $json = '
             <script type="application/ld+json">
             {
-                ' . implode(",", $result) . '
+                ' . preg_replace('/\s+/', ' ', implode(",", $result)) . '
             }
             </script>';
 
         // Add Custom Code
-        $customCode = $this->data->get("custom", null);
+        /*$customCode = $this->data->get("custom", null);
         if (!empty($customCode) && strpos($customCode, '</script>') !== false)
         {
             $json .= "\n" . $customCode . "\n";
-        }
+        }*/
 
         return $json;
     }
@@ -186,6 +186,35 @@ class AmvidiaGSDJSON
                 "url": "' . $this->data->get("url") . '",
                 "logo": "' . $this->data->get("logo") . '"';
 
+        return $json;
+    }
+
+    private function contentTypeSoftware()
+    {
+        $json[] = '"@context": "https://schema.org/",
+        "@type": "SoftwareApplication",
+        "name": "' . $this->data->get('name') . '",
+        "operatingSystem": "' . $this->data->get('os') . '",
+        "applicationCategory": "' . $this->data->get('category') . '"
+        ';
+        if ($this->data->get("ratingvalue"))
+        {
+            $json[] = '
+                "aggregateRating": {
+                    "@type": "AggregateRating",
+                    "ratingValue": "' . $this->data->get("ratingvalue") . '",
+                    "ratingCount":  "' . $this->data->get("ratingcount"). '"
+                }';
+        }
+        if ($this->data->get("price"))
+        {
+            $json[] = '
+                "offers": {
+                    "@type": "Offer",
+                    "price": "' . $this->data->get("price") . '",
+                    "priceCurrency":  "' . $this->data->get("currency"). '"
+                }';
+        }
         return $json;
     }
 

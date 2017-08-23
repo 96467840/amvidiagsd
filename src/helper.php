@@ -158,6 +158,28 @@ class AmvidiaGSDHelper
     	return $res;
     }
 
+    public static function getSoftware(&$menu, &$params)
+    {
+        $overrides = self::ReadMicrodata(self::$path . '/software/', 'm.' . $menu->id);
+
+        /*echo '<pre>';
+		var_dump($overrides);
+		echo '<pre>';/**/
+
+        if (!$overrides) return;
+        $data = array(
+	        "contentType" => "Software",
+            "name"        => self::prepareVal(isset($overrides['name']) ? $overrides['name'] : ''),
+            "os"          => self::prepareVal(isset($overrides['os']) ? $overrides['os'] : ''),
+            "category"    => self::prepareVal(isset($overrides['category']) ? $overrides['category'] : ''),
+            "ratingvalue" => self::prepareVal(isset($overrides['ratingvalue']) ? $overrides['ratingvalue'] : ''),
+            "ratingcount" => self::prepareVal(isset($overrides['ratingcount']) ? $overrides['ratingcount'] : ''),
+            "price"       => self::prepareVal(isset($overrides['price']) ? $overrides['price'] : ''),
+            "currency"    => self::prepareVal(isset($overrides['currency']) ? $overrides['currency'] : ''),
+        );
+        return $data;
+    }
+
     /**
      *  Get article's data
      *
