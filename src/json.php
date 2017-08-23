@@ -220,15 +220,28 @@ class AmvidiaGSDJSON
         // Author
         if ($this->data->get("authorName"))
         {
+            $plogo = '';
+            $pl = $this->data->get("authorLogo");
+            if ($pl)
+            {
+                $plogo = ',"image": {
+                    "@type": "ImageObject",
+                    "url": "' . $this->data->get("authorLogo") . '",
+                    "height": ' . $this->data->get("authorLogoHeight") . ',
+                    "width":  ' . $this->data->get("authorLogoWidth"). '
+                }';
+            }
             $json[] = '
                 "author": {
                     "@type": "Organization",
                     "name": "' . $this->data->get("authorName") . '"
+                    ' . $plogo . '
                 }';
             $json[] = '
                 "publisher": {
                     "@type": "Organization",
                     "name": "' . $this->data->get("authorName") . '"
+                    ' . $plogo . '
                 }';
         }
 

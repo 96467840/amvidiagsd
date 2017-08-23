@@ -214,6 +214,13 @@ class AmvidiaGSDHelper
                     $overrides['author'] : 
                     ($item->created_by_alias ? $item->created_by_alias : $item->author)
             ),
+            "authorLogo"     => self::prepareVal(
+                self::imageURL(
+                    isset($overrides['authorlogo']) ? 
+                    $overrides['authorlogo'] : 
+                    "images/amvidia_logo.png"
+                )
+            ),
 
             //"ratingValue" => $item->rating,
             //"reviewCount" => $item->rating_count
@@ -229,6 +236,19 @@ class AmvidiaGSDHelper
 			else
 			{
 				unset($data['image']);
+			}
+        }/**/
+        if ($data['authorLogo'])
+		{
+			$size = self::getImageSize($data['authorLogo']);
+			if ($size['width'] > 0 && $size['height'] > 0)
+			{
+				$data['authorLogoWidth'] = $size['width'];
+				$data['authorLogoHeight'] = $size['height'];
+			}
+			else
+			{
+				unset($data['authorLogo']);
 			}
 		}/**/
         return $data;
