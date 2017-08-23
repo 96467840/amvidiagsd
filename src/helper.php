@@ -32,7 +32,7 @@ class AmvidiaGSDHelper
      *
      *  @var string
      */
-    private static $path = JPATH_ROOT . '/microdata';
+    private static function path() { return JPATH_ROOT . '/microdata'; }
 
     /**
      *  Checks if document is a feed document (xml, rss, atom)
@@ -66,7 +66,7 @@ class AmvidiaGSDHelper
 
     public static function ReadSettings()
     {
-    	$data = self::ReadMicrodata(self::$path, 'settings');
+    	$data = self::ReadMicrodata(self::path(), 'settings');
     	
 		if ($data === false)
     	{
@@ -160,7 +160,7 @@ class AmvidiaGSDHelper
 
     public static function getSoftware(&$menu, &$params)
     {
-        $overrides = self::ReadMicrodata(self::$path . '/software/', 'm.' . $menu->id);
+        $overrides = self::ReadMicrodata(self::path() . '/software/', 'm.' . $menu->id);
 
         /*echo '<pre>';
 		var_dump($overrides);
@@ -187,8 +187,8 @@ class AmvidiaGSDHelper
      */
     public static function getArticle(&$item, &$menu, &$params)
     {
-    	$overrides = self::ReadMicrodata(self::$path . '/articles/', 'm.' . $menu->id);
-    	if (!$overrides) $overrides = self::ReadMicrodata(self::$path . '/articles/', 'a.' . $item->id);
+    	$overrides = self::ReadMicrodata(self::path() . '/articles/', 'm.' . $menu->id);
+    	if (!$overrides) $overrides = self::ReadMicrodata(self::path() . '/articles/', 'a.' . $item->id);
     	if (!$overrides) $overrides = array(); // чтоб не делать проверку на нул
 
         //echo 'intro='. $item->introtext;
