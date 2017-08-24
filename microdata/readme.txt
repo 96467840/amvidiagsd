@@ -29,6 +29,7 @@
 	2.6. "modified"    => измения
 	2.7. "published"   => публикации
 	2.8. "author"      => имя автора (по умолчанию берем из "author alias" created_by_alias)
+	2.9. "authorlogo"  => фото автора и паблишера
 3. Software
 	нужно создать файл в папке microdata/software
 	Именование файлов тока так "m.{menu ID}.txt" 
