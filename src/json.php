@@ -288,7 +288,7 @@ class AmvidiaGSDJSON
             $pl = $this->data->get("authorLogo");
             if ($pl)
             {
-                $plogo = ',"image": {
+                $plogo = ',"logo": {
                     "@type": "ImageObject",
                     "url": "' . $this->data->get("authorLogo") . '",
                     "height": ' . $this->data->get("authorLogoHeight") . ',
