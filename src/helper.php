@@ -176,7 +176,26 @@ class AmvidiaGSDHelper
             "ratingcount" => self::prepareVal(isset($overrides['ratingcount']) ? $overrides['ratingcount'] : ''),
             "price"       => self::prepareVal(isset($overrides['price']) ? $overrides['price'] : ''),
             "currency"    => self::prepareVal(isset($overrides['currency']) ? $overrides['currency'] : ''),
+            "version"    => self::prepareVal(isset($overrides['version']) ? $overrides['version'] : ''),
+            "screenshot"  => self::prepareVal(
+                isset($overrides['screenshot']) ? self::imageURL($overrides['screenshot']) : ''
+            ),
+            "datePublished"  => self::prepareVal(isset($overrides['published']) ? $overrides['published'] : ''),
         );
+
+        if ($data['screenshot'])
+		{
+			$size = self::getImageSize($data['screenshot']);
+			if ($size['width'] > 0 && $size['height'] > 0)
+			{
+				$data['screenshotWidth'] = $size['width'];
+				$data['screenshotHeight'] = $size['height'];
+			}
+			else
+			{
+				unset($data['screenshot']);
+			}
+        }/**/
         return $data;
     }
 

@@ -41,4 +41,7 @@
 	ratingcount:100500
 	price:200
 	currency: USD
+	screenshot: path/to/image.png
+	published:
+	version
  

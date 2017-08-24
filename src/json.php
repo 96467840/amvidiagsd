@@ -197,6 +197,28 @@ class AmvidiaGSDJSON
         "operatingSystem": "' . $this->data->get('os') . '",
         "applicationCategory": "' . $this->data->get('category') . '"
         ';
+        //softwareVersion
+        if ($this->data->get("version"))
+        {
+            $json[] = '
+            "softwareVersion": "' . $this->data->get('version') . '"';
+        }
+        //datePublished
+        if ($this->data->get("datePublished"))
+        {
+            $json[] = '
+            "datePublished": "' . $this->data->get('datePublished') . '"';
+        }
+        if ($this->data->get("screenshot"))
+        {
+            $json[] = '
+                "screenshot": {
+                    "@type": "ImageObject",
+                    "url": "' . $this->data->get("screenshot") . '",
+                    "height": ' . $this->data->get("screenshotHeight") . ',
+                    "width":  ' . $this->data->get("screenshotWidth"). '
+                }';
+        }
         if ($this->data->get("ratingvalue"))
         {
             $json[] = '
