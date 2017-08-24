@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package         Google Structured Data !
+ * @package         Google Structured Data
  * @version         3.6.4 Free
  *
  * @author          Andrey Murin <96467840@mail.ru>
