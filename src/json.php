@@ -183,9 +183,22 @@ class AmvidiaGSDJSON
     {
         $json[] = '"@context": "https://schema.org",
                 "@type": "Organization",
+                "name": "' . $this->data->get("name") . '",
                 "url": "' . $this->data->get("url") . '",
                 "logo": "' . $this->data->get("logo") . '"';
 
+        $sameas = $this->data->get("sameas");
+        if ($sameas)
+        {
+            if (!is_array($sameas)) $sameas = array($sameas);
+            $sameas = array_map(function($item) { return '"' . $item . '"'; }, $sameas);
+            /*echo '<pre>';
+            var_dump($sameas);
+            echo '<pre>';/**/
+            
+            $json[] = '
+            "sameAs": [' . implode(',', $sameas) . ']';
+        }
         return $json;
     }
 

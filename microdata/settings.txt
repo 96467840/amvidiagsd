@@ -6,6 +6,9 @@ sitename:	"Amvidia"
 sitealtname: Sample of \' sadf 
 sitelogo:	https://amvidia.com/images/amvidia_logo.png
 siteurl:	https://amvidia.com
+sameas: https://www.facebook.com/amvidia/
+sameas: https://twitter.com/amvidiasoftware
+sameas: https://plus.google.com/+amvidiasoftware
 
 # Breadcrumbs
 homename:				Main

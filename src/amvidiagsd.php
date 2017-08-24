@@ -201,16 +201,26 @@ class plgSystemAmvidiaGSD extends JPlugin
      */
     private function getJSONLogo()
     {
-        if (!$logo = AmvidiaGSDHelper::getSetting('sitelogo'))
+        // не тока лого!!
+        /*if (!$logo = AmvidiaGSDHelper::getSetting('sitelogo'))
         {
             return;
-        }
+        }*/
 
+        $logo = AmvidiaGSDHelper::getSetting('sitelogo');
+        $sameas = AmvidiaGSDHelper::getSetting('sameas');
+
+        /*echo '<pre>';
+		var_dump($sameas);
+        echo '<pre>';/**/
+        
         // Generate JSON
         return $this->json->setData(array(
             "contentType" => "logo",
+            "name"        => AmvidiaGSDHelper::getSetting('sitename'),
             "url"         => AmvidiaGSDHelper::getSetting('siteurl'),
-            "logo"        => $logo
+            "logo"        => $logo,
+            "sameas"      => $sameas
         ))->generate();
     }
 

@@ -100,11 +100,18 @@ class AmvidiaGSDHelper
 				$key = str_replace(array('\\', '"'), array('', '\\"'), trim($tmp[0]));
 				$value = self::prepareVal($tmp[1]);//str_replace(array('\\', '"'), array('\\\\', '\\"'), trim($tmp[1])); // на всякий случай тоже будем чистить
 
-				if (isset($data[$key])) // а вдруг дубль ключа? но пока забиваем
+				if (isset($data[$key])) // а вдруг дубль ключа? делаем массив
 				{
+                    if (!is_array($data[$key]))
+                    {
+                        $data[$key] = array($data[$key]);
+                    }
+                    array_push($data[$key], $value);
 				}
-
-				$data[$key] = $value;
+                else
+                {
+                    $data[$key] = $value;
+                }
 			}
 			return $data;
 		}

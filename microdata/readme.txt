@@ -12,9 +12,11 @@
 	1.2. sitealtname: Sample of \' sadf   (значение по умолчанию: нет) это поле используется в https://developers.google.com/search/docs/data-types/sitename
 	1.3. sitelogo:	https://amvidia.com/images/amvidia_logo.png  (значение по умолчанию: https://amvidia.com/images/amvidia_logo.png)
 	1.4. siteurl:	https://amvidia.com  (значение по умолчанию: https://amvidia.com/)
-	1.5. homename:	название главной страницы для хлебных крошек (значение по умолчанию: берется из 1.1.)
-	1.5. breadcrumbs_enabled:	0 или 1 показывать или нет хлебные крошки (значение по умолчанию: 0)
-	1.5. articles_enabled:	0 или 1 показывать или нет статьи (значение по умолчанию: 0)
+        1.5. sameas: ссылка на соц сети, таких ключей может быть несколько! 
+	1.6. homename:	название главной страницы для хлебных крошек (значение по умолчанию: берется из 1.1.)
+	1.7. breadcrumbs_enabled:	0 или 1 показывать или нет хлебные крошки (значение по умолчанию: 0)
+	1.8. articles_enabled:	0 или 1 показывать или нет статьи (значение по умолчанию: 0)
+
 
 2. Статьи
 	Если articles_enabled: 1, то на страницах со статьями будет позан https://developers.google.com/search/docs/data-types/articles
