@@ -220,7 +220,7 @@ class AmvidiaGSDHelper
         //echo 'intro='. $item->introtext;
         //echo '---->' . $item->metadesc;
 		/*echo '<pre>';
-		var_dump($item);
+		var_dump($menu->params['page_title']);
 		echo '<pre>';/**/
 
         $image = new Registry($item->images);
@@ -238,7 +238,14 @@ class AmvidiaGSDHelper
                     //self::proto() . $_SERVER['SERVER_NAME'] . JRoute::_(ContentHelperRoute::getArticleRoute($item->slug, $item->catid, $item->language))
                     AmvidiaUrlHelper::getCanonical($params)
             ),
-            "title"       => self::prepareVal(isset($overrides['title']) ? $overrides['title'] : $item->title),
+            // titl надо брать с раздела, по просьбе ани
+            "title"       => self::prepareVal(
+                isset($overrides['title']) ? 
+                $overrides['title'] : 
+                (
+                    $menu->params['page_title'] ? $menu->params['page_title'] : $item->title
+                )
+            ),
             "description" => self::prepareVal(
                 isset($overrides['description']) ? 
                     $overrides['description'] : 
