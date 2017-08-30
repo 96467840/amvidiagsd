@@ -132,7 +132,14 @@ class AmvidiaGSDHelper
             return array("width" => 0, "height" => 0);
         }
 
-        $imageSize = $image ? getimagesize($image) : array(0, 0);
+        if (!(substr($img, 0, 8) == 'https://' || substr($img, 0, 7) == 'http://')) 
+        {
+            $imageSize = $image ? getimagesize(JPATH_ROOT . '/' . $image) : array(0, 0);
+        }
+        else
+        {    
+            $imageSize = $image ? getimagesize($image) : array(0, 0);
+        }
 
         $info["width"]  = $imageSize[0];
         $info["height"] = $imageSize[1];
@@ -185,7 +192,7 @@ class AmvidiaGSDHelper
             "currency"    => self::prepareVal(isset($overrides['currency']) ? $overrides['currency'] : ''),
             "version"    => self::prepareVal(isset($overrides['version']) ? $overrides['version'] : ''),
             "screenshot"  => self::prepareVal(
-                isset($overrides['screenshot']) ? self::imageURL($overrides['screenshot']) : ''
+                isset($overrides['screenshot']) ? $overrides['screenshot'] : ''
             ),
             "datePublished"  => self::prepareVal(isset($overrides['published']) ? $overrides['published'] : ''),
         );
@@ -196,7 +203,8 @@ class AmvidiaGSDHelper
 			if ($size['width'] > 0 && $size['height'] > 0)
 			{
 				$data['screenshotWidth'] = $size['width'];
-				$data['screenshotHeight'] = $size['height'];
+                $data['screenshotHeight'] = $size['height'];
+                $data['screenshot'] = self::imageURL($data['screenshot']);
 			}
 			else
 			{
@@ -257,7 +265,7 @@ class AmvidiaGSDHelper
                 , true
             ),
             "image"       => self::prepareVal(
-                isset($overrides['image']) ? self::imageURL($overrides['image']) : self::imageURL($image->get("image_intro") ?: $image->get("image_fulltext"))
+                isset($overrides['image']) ? $overrides['image'] : ($image->get("image_intro") ?: $image->get("image_fulltext"))
             ),
             //"created_by"  => $item->created_by,
             "dateCreated"     => self::prepareVal(isset($overrides['created']) ? $overrides['created'] : $item->created),
@@ -270,11 +278,9 @@ class AmvidiaGSDHelper
                     ($item->created_by_alias ? $item->created_by_alias : $item->author)
             ),
             "authorLogo"     => self::prepareVal(
-                self::imageURL(
                     isset($overrides['authorlogo']) ? 
                     $overrides['authorlogo'] : 
                     "images/amvidia_logo.png"
-                )
             ),
 
             //"ratingValue" => $item->rating,
@@ -286,7 +292,8 @@ class AmvidiaGSDHelper
 			if ($size['width'] > 0 && $size['height'] > 0)
 			{
 				$data['imageWidth'] = $size['width'];
-				$data['imageHeight'] = $size['height'];
+                $data['imageHeight'] = $size['height'];
+                $data['image'] = self::imageURL($data['image']);
 			}
 			else
 			{
@@ -299,7 +306,8 @@ class AmvidiaGSDHelper
 			if ($size['width'] > 0 && $size['height'] > 0)
 			{
 				$data['authorLogoWidth'] = $size['width'];
-				$data['authorLogoHeight'] = $size['height'];
+                $data['authorLogoHeight'] = $size['height'];
+                $data['authorLogo'] = self::imageURL($data['authorLogo']);
 			}
 			else
 			{
