@@ -132,7 +132,7 @@ class AmvidiaGSDHelper
             return array("width" => 0, "height" => 0);
         }
 
-        if (!(substr($img, 0, 8) == 'https://' || substr($img, 0, 7) == 'http://')) 
+        if (!(substr($image, 0, 8) == 'https://' || substr($image, 0, 7) == 'http://')) 
         {
             $imageSize = $image ? getimagesize(JPATH_ROOT . '/' . $image) : array(0, 0);
         }
