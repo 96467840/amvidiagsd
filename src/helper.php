@@ -167,6 +167,16 @@ class AmvidiaGSDHelper
 
     public static function prepareVal($val, $clearHtml = false)
     {
+        if ($clearHtml)
+        {
+            /*echo '<pre>';
+            var_dump($val);
+            echo '<pre>';/**/
+            if (stripos($val, '&lt;?php') !== false) // злоебучие вставки пхп кода
+            {
+                $val = str_replace(array('&lt;?php', '?&gt;'), array('<?php', '?>'), $val); // strip_tags вырежет html и php теги
+            }
+        }
     	$res = str_replace(array('\\', '"'), array('\\\\', '\\"'), trim($clearHtml ? strip_tags($val) : $val));
     	$res = preg_replace('/\{[^\}]*\}/', '', $res);
     	return $res;
