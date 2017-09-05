@@ -254,9 +254,12 @@ class plgSystemAmvidiaGSD extends JPlugin
 
 		$menu = $this->getCurrentMenuItem();
 
+        $art = AmvidiaGSDHelper::getArticle($row, $menu, $params);
+        if (!$art) return;
+
         // Generate JSON
         return $this->json->setData(
-            AmvidiaGSDHelper::getArticle($row, $menu, $params)
+            $art
         )->generate();
     }
 
