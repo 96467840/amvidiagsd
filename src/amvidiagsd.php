@@ -182,17 +182,65 @@ class plgSystemAmvidiaGSD extends JPlugin
 		if (!AmvidiaGSDHelper::isFrontPage())
 		{
 			return;
-		}
+        }
+        $url = AmvidiaGSDHelper::getSetting('siteurl');
+        $searchURL = '';
+        if (AmvidiaGSDHelper::getSetting("search_enabled"))
+        {
+            $searchURL = trim(AmvidiaGSDHelper::getSetting("search_url"));
+            if (!$searchURL)
+                $searchURL = AmvidiaGSDHelper::route($url . '/index.php?option=com_search&searchphrase=all&searchword={search_term}');
+        }
 
         // Generate JSON
         return $this->json->setData(array(
             "contentType" => "sitename",
             "name"        => AmvidiaGSDHelper::getSetting('sitename'),
-            "url"         => AmvidiaGSDHelper::getSetting('siteurl'),
-            "alt"         => AmvidiaGSDHelper::getSetting('sitealtname')
+            "url"         => $url,
+            "alt"         => AmvidiaGSDHelper::getSetting('sitealtname'),
+            "searchurl"   => $searchURL
         ))->generate();
     }
 
+	/**
+	 *  Returns Sitelinks Searchbox structured data markup
+	 *  https://developers.google.com/search/docs/data-types/sitelinks-searchbox
+	 *
+	 *  @return  string on success, boolean on fail
+	 */
+    /*private function getJSONSitelinksSearch()
+    {
+        if (!AmvidiaGSDHelper::getSetting("search_enabled"))
+        {
+             return;
+        }
+ 
+         // Setup the right Search URL
+        //switch ($sitelinks)
+        //{
+        //    case "1": // com_search
+        //         $searchURL = GSDHelper::route(JURI::base() . 'index.php?option=com_search&searchphrase=all&searchword={search_term}');
+        //         break;
+        //    case "2": // com_finder
+        //         $searchURL = GSDHelper::route(JURI::base() . 'index.php?option=com_finder&q={search_term}');
+        //         break;
+        //    case "3": // custom URL
+        //         $searchURL = trim($this->params->get('sitelinks_search_custom_url'));
+        //         break;
+        //}
+
+        $searchURL = trim(AmvidiaGSDHelper::getSetting("search_url"));
+        if (!$searchURL)
+            $searchURL = AmvidiaGSDHelper::route(JURI::base() . 'index.php?option=com_search&searchphrase=all&searchword={search_term}');
+ 
+         // Generate JSON
+        return $this->json->setData(array(
+             "contentType" => "search",
+             "siteurl"     => AmvidiaGSDHelper::getSetting('siteurl'),
+             "searchurl"   => $searchURL
+        ))->generate();
+    }*/
+     
     /**
      *  Returns Site Logo structured data markup
      *  https://developers.google.com/search/docs/data-types/logo

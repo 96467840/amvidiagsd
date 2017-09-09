@@ -83,7 +83,7 @@ class AmvidiaGSDJSON
         $json = '
             <script type="application/ld+json">
             {
-                ' . preg_replace('/\\\s+/u', ' ', implode(",", $result)) . '
+                ' . preg_replace('/\s+/u', ' ', implode(",", $result)) . '
             }
             </script>'; //$this->prep(implode(",", $result)))
 
@@ -150,6 +150,17 @@ class AmvidiaGSDJSON
                 "alternateName": "' . $this->data->get("alt") . '"';
         }
 
+        $searchurl = $this->data->get("searchurl");
+        if ($searchurl)
+        {
+            $json[] = '
+                "potentialAction": {
+                "@type": "SearchAction",
+                "target": "' . $searchurl . '",
+                "query-input": "required name=search_term"
+            }';
+        }        
+
         return $json;
     }
 
@@ -159,7 +170,7 @@ class AmvidiaGSDJSON
      *
      *  @return  string on success, boolean on fail
      */
-    private function contentTypeSearch()
+    /*private function contentTypeSearch()
     {
         $json[] = '"@context": "https://schema.org",
                 "@type": "WebSite",
@@ -168,10 +179,10 @@ class AmvidiaGSDJSON
                     "@type": "SearchAction",
                     "target": "' . $this->data->get("searchurl") . '",
                     "query-input": "required name=search_term"
-                }';
-
+        }';
+        
         return $json;
-    }
+    }*/
 
     /**
      *  Returns Site Logo Content Type
@@ -199,6 +210,7 @@ class AmvidiaGSDJSON
             $json[] = '
             "sameAs": [' . implode(',', $sameas) . ']';
         }
+       
         return $json;
     }
 

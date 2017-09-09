@@ -176,14 +176,16 @@ class AmvidiaGSDHelper
             {
                 $val = str_replace(array('&lt;?php', '?&gt;'), array('<?php', '?>'), $val); // strip_tags вырежет html и php теги
             }
+            $res = preg_replace('/\{[^\}]*\}/', '', $res);
         }
-    	$res = str_replace(array('\\', '"'), array('\\\\', '\\"'), trim($clearHtml ? strip_tags($val) : $val));
-    	$res = preg_replace('/\{[^\}]*\}/', '', $res);
+        $res = str_replace(array('\\', '"'), array('\\\\', '\\"'), trim($clearHtml ? strip_tags($val) : $val));
+        
     	return $res;
     }
 
     public static function getSoftware(&$menu, &$params)
     {
+        if (!$menu) return;
         $overrides = self::ReadMicrodata(self::path() . '/software/', 'm.' . $menu->id);
 
         /*echo '<pre>';
