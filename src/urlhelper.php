@@ -16,8 +16,12 @@
 		public static function getCanonical($params)
 		{
 			$sef_on = self::get_joomla_config('sef', false);
-			$domain = $params->get('domain', isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '');
-			$proto  = $params->get('protocol', null);
+			// в оригинальном плашине читается с конфига плагина, в нашем плагине такого нет и потому тупо в коде
+			//$domain = $params->get('domain', isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '');
+			$domain = 'amvidia.com';
+			//$proto  = $params->get('protocol', null);
+			$proto = 'https';
+
 			if (empty($domain)) {
 				return;
 			}

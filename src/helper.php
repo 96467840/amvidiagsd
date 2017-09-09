@@ -189,7 +189,6 @@ class AmvidiaGSDHelper
         /*echo '<pre>';
 		var_dump($overrides);
 		echo '<pre>';/**/
-
         if (!$overrides) return;
         $data = array(
 	        "contentType" => "Software",
@@ -231,103 +230,116 @@ class AmvidiaGSDHelper
      */
     public static function getArticle(&$item, &$menu, &$params)
     {
-    	$overrides = self::ReadMicrodata(self::path() . '/articles/', 'm.' . $menu->id);
-    	if (!$overrides) $overrides = self::ReadMicrodata(self::path() . '/articles/', 'a.' . $item->id);
-    	if (!$overrides) $overrides = array(); // чтоб не делать проверку на нул
+        try
+        {
+            //error_log("getArticle 0");
+            $overrides = self::ReadMicrodata(self::path() . '/articles/', 'm.' . $menu->id);
+            if (!$overrides) $overrides = self::ReadMicrodata(self::path() . '/articles/', 'a.' . $item->id);
+            if (!$overrides) $overrides = array(); // чтоб не делать проверку на нул
 
-        // аня просила если нет микродаты то не показывать.
-        if (!$overrides) return;
+            // аня просила если нет микродаты то не показывать.
+            if (!$overrides) return;
+            //error_log("getArticle 1");
 
-        //echo 'intro='. $item->introtext;
-        //echo '---->' . $item->metadesc;
-		/*echo '<pre>';
-		var_dump($menu->params['page_title']);
-		echo '<pre>';/**/
+            //echo 'intro='. $item->introtext;
+            //echo '---->' . $item->metadesc;
+            /*echo '<pre>';
+            var_dump($menu->params['page_title']);
+            echo '<pre>';/**/
 
-        $image = new Registry($item->images);
+            $image = new Registry($item->images);
+            //error_log("getArticle 2");
+            /*echo '<pre>';
+            var_dump($image->get("image_intro"));
+            echo '<pre>';/**/
 
-		/*echo '<pre>';
-		var_dump($image->get("image_intro"));
-		echo '<pre>';/**/
-
-        // Array data
-        $data = array(
-	        "contentType" => "article",
-	        "url"         => self::prepareVal(
-                isset($overrides['url']) ? 
-                    $overrides['url'] : 
-                    //self::proto() . $_SERVER['SERVER_NAME'] . JRoute::_(ContentHelperRoute::getArticleRoute($item->slug, $item->catid, $item->language))
-                    AmvidiaUrlHelper::getCanonical($params)
-            ),
-            // titl надо брать с раздела, по просьбе ани
-            "title"       => self::prepareVal(
-                isset($overrides['title']) ? 
-                $overrides['title'] : 
-                (
-                    $menu->params['page_title'] ? $menu->params['page_title'] : $item->title
-                )
-            ),
-            "description" => self::prepareVal(
-                isset($overrides['description']) ? 
-                    $overrides['description'] : 
+            // Array data
+            $data = array(
+                "contentType" => "article",
+                "url"         => self::prepareVal(
+                    isset($overrides['url']) ? 
+                        $overrides['url'] : 
+                        //self::proto() . $_SERVER['SERVER_NAME'] . JRoute::_(ContentHelperRoute::getArticleRoute($item->slug, $item->catid, $item->language))
+                        AmvidiaUrlHelper::getCanonical($params)
+                ),
+                // titl надо брать с раздела, по просьбе ани
+                "title"       => self::prepareVal(
+                    isset($overrides['title']) ? 
+                    $overrides['title'] : 
                     (
-                        isset($item->metadesc) && !empty($item->metadesc) ? 
-                        $item->metadesc : 
-                        (isset($item->introtext) && !empty($item->introtext) ? $item->introtext : $item->fulltext)
+                        $menu->params['page_title'] ? $menu->params['page_title'] : $item->title
                     )
-                , true
-            ),
-            "image"       => self::prepareVal(
-                isset($overrides['image']) ? $overrides['image'] : ($image->get("image_intro") ?: $image->get("image_fulltext"))
-            ),
-            //"created_by"  => $item->created_by,
-            "dateCreated"     => self::prepareVal(isset($overrides['created']) ? $overrides['created'] : $item->created),
-            "dateModified"    => self::prepareVal(isset($overrides['modified']) ? $overrides['modified'] : $item->modified),
-            "datePublished"  => self::prepareVal(isset($overrides['published']) ? $overrides['published'] : $item->publish_up),
-            
-            "authorName"     => self::prepareVal(
-                isset($overrides['author']) ? 
-                    $overrides['author'] : 
-                    ($item->created_by_alias ? $item->created_by_alias : $item->author)
-            ),
-            "authorLogo"     => self::prepareVal(
-                    isset($overrides['authorlogo']) ? 
-                    $overrides['authorlogo'] : 
-                    "images/amvidia_logo.png"
-            ),
+                ),
+                "description" => self::prepareVal(
+                    isset($overrides['description']) ? 
+                        $overrides['description'] : 
+                        (
+                            isset($item->metadesc) && !empty($item->metadesc) ? 
+                            $item->metadesc : 
+                            (isset($item->introtext) && !empty($item->introtext) ? $item->introtext : $item->fulltext)
+                        )
+                    , true
+                ),
+                "image"       => self::prepareVal(
+                    isset($overrides['image']) ? $overrides['image'] : ($image->get("image_intro") ?: $image->get("image_fulltext"))
+                ),
+                //"created_by"  => $item->created_by,
+                "dateCreated"     => self::prepareVal(isset($overrides['created']) ? $overrides['created'] : $item->created),
+                "dateModified"    => self::prepareVal(isset($overrides['modified']) ? $overrides['modified'] : $item->modified),
+                "datePublished"  => self::prepareVal(isset($overrides['published']) ? $overrides['published'] : $item->publish_up),
+                
+                "authorName"     => self::prepareVal(
+                    isset($overrides['author']) ? 
+                        $overrides['author'] : 
+                        ($item->created_by_alias ? $item->created_by_alias : $item->author)
+                ),
+                "authorLogo"     => self::prepareVal(
+                        isset($overrides['authorlogo']) ? 
+                        $overrides['authorlogo'] : 
+                        "images/amvidia_logo.png"
+                ),
 
-            //"ratingValue" => $item->rating,
-            //"reviewCount" => $item->rating_count
-        );
-		if ($data['image'])
-		{
-			$size = self::getImageSize($data['image']);
-			if ($size['width'] > 0 && $size['height'] > 0)
-			{
-				$data['imageWidth'] = $size['width'];
-                $data['imageHeight'] = $size['height'];
-                $data['image'] = self::imageURL($data['image']);
-			}
-			else
-			{
-				unset($data['image']);
-			}
-        }/**/
-        if ($data['authorLogo'])
-		{
-			$size = self::getImageSize($data['authorLogo']);
-			if ($size['width'] > 0 && $size['height'] > 0)
-			{
-				$data['authorLogoWidth'] = $size['width'];
-                $data['authorLogoHeight'] = $size['height'];
-                $data['authorLogo'] = self::imageURL($data['authorLogo']);
-			}
-			else
-			{
-				unset($data['authorLogo']);
-			}
-		}/**/
-        return $data;
+                //"ratingValue" => $item->rating,
+                //"reviewCount" => $item->rating_count
+            );
+            //error_log("getArticle 3");
+            if ($data['image'])
+            {
+                $size = self::getImageSize($data['image']);
+                if ($size['width'] > 0 && $size['height'] > 0)
+                {
+                    $data['imageWidth'] = $size['width'];
+                    $data['imageHeight'] = $size['height'];
+                    $data['image'] = self::imageURL($data['image']);
+                }
+                else
+                {
+                    unset($data['image']);
+                }
+            }/**/
+            //error_log("getArticle 4");
+            if ($data['authorLogo'])
+            {
+                $size = self::getImageSize($data['authorLogo']);
+                if ($size['width'] > 0 && $size['height'] > 0)
+                {
+                    $data['authorLogoWidth'] = $size['width'];
+                    $data['authorLogoHeight'] = $size['height'];
+                    $data['authorLogo'] = self::imageURL($data['authorLogo']);
+                }
+                else
+                {
+                    unset($data['authorLogo']);
+                }
+            }/**/
+            //error_log("getArticle 5");
+            return $data;
+        }
+        catch(Exception $e)
+        {
+            //error_log("getArticle !!!!!" . $e->getMessage());
+            return;
+        }
     }
 
     /**
@@ -423,8 +435,12 @@ class AmvidiaGSDHelper
 
     public static function getCurrentMenuItem()
     {
+        //error_log("getCurrentMenuItem 0");
         $menu = JFactory::getApplication()->getMenu();
-        return $menu->getActive();
+        //error_log("getCurrentMenuItem 1");
+        $m = $menu->getActive();
+        //error_log("getCurrentMenuItem 2");
+        return $m;
     }
 
 }

@@ -47,4 +47,6 @@
 	screenshot: path/to/image.png
 	published:
 	version
+	publisher
+	publisherLogo
  

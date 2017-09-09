@@ -252,25 +252,28 @@ class plgSystemAmvidiaGSD extends JPlugin
             return;
         }
 
-		$menu = $this->getCurrentMenuItem();
+        $menu = $this->getCurrentMenuItem();
 
         $art = AmvidiaGSDHelper::getArticle($row, $menu, $params);
+        
         if (!$art) return;
-
+        
         // Generate JSON
-        return $this->json->setData(
+        $json = $this->json->setData(
             $art
         )->generate();
+
+        return $json;
     }
 
     private function getJSONSoftware(&$params)
     {
 		$menu = $this->getCurrentMenuItem();
-
         // Generate JSON
         $s = AmvidiaGSDHelper::getSoftware($menu, $params);
         if (!$s) return;
-        return $this->json->setData($s)->generate();
+        $json = $this->json->setData($s)->generate();
+        return $json;
     }
 
 	/**
