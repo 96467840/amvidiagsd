@@ -83,7 +83,7 @@ class AmvidiaGSDJSON
         $json = '
             <script type="application/ld+json">
             {
-                ' . preg_replace('/\s+/u', ' ', implode(",", $result)) . '
+                ' . preg_replace('/\\\s+/u', ' ', implode(",", $result)) . '
             }
             </script>'; //$this->prep(implode(",", $result)))
 
@@ -259,9 +259,9 @@ class AmvidiaGSDJSON
             {
                 $plogo = ',"logo": {
                     "@type": "ImageObject",
-                    "url": "' . $this->data->get("authorLogo") . '",
-                    "height": ' . $this->data->get("authorLogoHeight") . ',
-                    "width":  ' . $this->data->get("authorLogoWidth"). '
+                    "url": "' . $this->data->get("publisherLogo") . '",
+                    "height": ' . $this->data->get("publisherLogoHeight") . ',
+                    "width":  ' . $this->data->get("publisherLogoWidth") . '
                 }';
             }
             $json[] = '
@@ -270,6 +270,36 @@ class AmvidiaGSDJSON
                     "name": "' . $this->data->get("publisher") . '"
                     ' . $plogo . '
                 }';
+        }
+
+        if ($this->data->get("reviewer"))
+        {
+            $r = '';
+            if ($this->data->get("reviewrating"))
+            {
+                $r = ',"reviewRating": {
+                    "@type": "Rating",
+                    "ratingValue": "' . $this->data->get("reviewrating") . '"
+                }';
+            }
+            $json[] = '
+                "review": {
+                    "@type": "Review",
+                    "author": { "@type": "Person", "name": "' . $this->data->get("reviewer") . '" },
+                    "datePublished":  "' . $this->data->get("reviewdate"). '"
+                    ' . $r . '
+                }';
+        }
+
+        if ($this->data->get("officialUrl"))
+        {
+            $json[] = '
+            "url": "' . $this->data->get('officialUrl') . '"';
+        }
+        if ($this->data->get("downloadUrl"))
+        {
+            $json[] = '
+            "downloadUrl": "' . $this->data->get('downloadUrl') . '"';
         }
         return $json;
     }

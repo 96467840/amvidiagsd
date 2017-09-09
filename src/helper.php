@@ -73,7 +73,7 @@ class AmvidiaGSDHelper
     		$data = array();
     	}
     	if (!isset($data['sitename'])) $data['sitename'] = 'Amvidia';
-    	if (!isset($data['sitelogo'])) $data['sitelogo'] = 'https://amvidia.com/images/amvidia_logo.png';
+    	if (!isset($data['sitelogo'])) $data['sitelogo'] = 'images/amvidia_logo.png';
     	if (!isset($data['siteurl'])) $data['siteurl'] = 'https://amvidia.com/';
     	if (!isset($data['homename'])) $data['homename'] = $data['sitename']; //'Amvidia main';
     	if (!isset($data['breadcrumbs_enabled'])) $data['breadcrumbs_enabled'] = '0';
@@ -199,11 +199,20 @@ class AmvidiaGSDHelper
             "ratingcount" => self::prepareVal(isset($overrides['ratingcount']) ? $overrides['ratingcount'] : ''),
             "price"       => self::prepareVal(isset($overrides['price']) ? $overrides['price'] : ''),
             "currency"    => self::prepareVal(isset($overrides['currency']) ? $overrides['currency'] : ''),
-            "version"    => self::prepareVal(isset($overrides['version']) ? $overrides['version'] : ''),
+            "version"     => self::prepareVal(isset($overrides['version']) ? $overrides['version'] : ''),
             "screenshot"  => self::prepareVal(
                 isset($overrides['screenshot']) ? $overrides['screenshot'] : ''
             ),
             "datePublished"  => self::prepareVal(isset($overrides['published']) ? $overrides['published'] : ''),
+            
+            "publisher"     => self::prepareVal(isset($overrides['publisher']) ? $overrides['publisher'] : 'Amvidia'),
+            "publisherLogo" => self::prepareVal(isset($overrides['publisherLogo']) ? $overrides['publisherLogo'] : 'images/amvidia_logo.png'),
+            
+            "officialUrl"  => self::prepareVal(isset($overrides['officialUrl']) ? $overrides['officialUrl'] : ''),
+            "downloadUrl"  => self::prepareVal(isset($overrides['downloadUrl']) ? $overrides['downloadUrl'] : ''),
+            "reviewer"  => self::prepareVal(isset($overrides['reviewer']) ? $overrides['reviewer'] : ''),
+            "reviewrating"  => self::prepareVal(isset($overrides['reviewrating']) ? $overrides['reviewrating'] : ''),
+            "reviewdate"  => self::prepareVal(isset($overrides['reviewdate']) ? $overrides['reviewdate'] : ''),
         );
 
         if ($data['screenshot'])
@@ -218,6 +227,20 @@ class AmvidiaGSDHelper
 			else
 			{
 				unset($data['screenshot']);
+			}
+        }/**/
+        if ($data['publisherLogo'])
+		{
+			$size = self::getImageSize($data['publisherLogo']);
+			if ($size['width'] > 0 && $size['height'] > 0)
+			{
+				$data['publisherLogoWidth'] = $size['width'];
+                $data['publisherLogoHeight'] = $size['height'];
+                $data['publisherLogo'] = self::imageURL($data['publisherLogo']);
+			}
+			else
+			{
+				unset($data['publisherLogo']);
 			}
         }/**/
         return $data;

@@ -10,7 +10,7 @@
 	этот файл содержит общие настройки GSD
 	1.1. sitename:	Amvidia (значение по умолчанию: Amvidia)
 	1.2. sitealtname: Sample of \' sadf   (значение по умолчанию: нет) это поле используется в https://developers.google.com/search/docs/data-types/sitename
-	1.3. sitelogo:	https://amvidia.com/images/amvidia_logo.png  (значение по умолчанию: https://amvidia.com/images/amvidia_logo.png)
+	1.3. sitelogo:	https://amvidia.com/images/amvidia_logo.png  (значение по умолчанию: images/amvidia_logo.png)
 	1.4. siteurl:	https://amvidia.com  (значение по умолчанию: https://amvidia.com/)
         1.5. sameas: ссылка на соц сети, таких ключей может быть несколько! 
 	1.6. homename:	название главной страницы для хлебных крошек (значение по умолчанию: берется из 1.1.)
@@ -47,6 +47,13 @@
 	screenshot: path/to/image.png
 	published:
 	version
-	publisher
-	publisherLogo
+	publisher: (по умолчанию Amvidia)
+	publisherLogo: (по умолчанию images/amvidia_logo.png)
+	officialUrl (в стандартах этого поля нет)
+	downloadUrl
+	reviewer
+	reviewrating
+	reviewdate
+
+
  
