@@ -83,9 +83,9 @@ class AmvidiaGSDJSON
         $json = '
             <script type="application/ld+json">
             {
-                ' . preg_replace('/\s+/', ' ', implode(",", $result)) . '
+                ' . preg_replace('/\s+/u', ' ', implode(",", $result)) . '
             }
-            </script>';
+            </script>'; //$this->prep(implode(",", $result)))
 
         // Add Custom Code
         /*$customCode = $this->data->get("custom", null);
@@ -250,7 +250,33 @@ class AmvidiaGSDJSON
                     "priceCurrency":  "' . $this->data->get("currency"). '"
                 }';
         }
+
+        if ($this->data->get("publisher"))
+        {
+            $plogo = '';
+            $pl = $this->data->get("publisherLogo");
+            if ($pl)
+            {
+                $plogo = ',"logo": {
+                    "@type": "ImageObject",
+                    "url": "' . $this->data->get("authorLogo") . '",
+                    "height": ' . $this->data->get("authorLogoHeight") . ',
+                    "width":  ' . $this->data->get("authorLogoWidth"). '
+                }';
+            }
+            $json[] = '
+                "publisher": {
+                    "@type": "Organization",
+                    "name": "' . $this->data->get("publisher") . '"
+                    ' . $plogo . '
+                }';
+        }
         return $json;
+    }
+
+    private function prep($val)
+    {
+        return str_replace(chr(0xc2).chr(0xa0), ' ', $val); //"\xc2\xa0"
     }
 
     /**
