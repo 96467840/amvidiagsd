@@ -51,7 +51,7 @@
 	version
 	publisher: (по умолчанию Amvidia)
 	publisherLogo: (по умолчанию images/amvidia_logo.png)
-	officialUrl (в стандартах этого поля нет)
+	officialUrl
 	downloadUrl
 	reviewer
 	reviewrating
