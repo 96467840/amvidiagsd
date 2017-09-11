@@ -176,7 +176,7 @@ class AmvidiaGSDHelper
             {
                 $val = str_replace(array('&lt;?php', '?&gt;'), array('<?php', '?>'), $val); // strip_tags вырежет html и php теги
             }
-            $res = preg_replace('/\{[^\}]*\}/', '', $res);
+            $val = preg_replace('/\{[^\}]*\}/', '', $val);
         }
         $res = str_replace(array('\\', '"'), array('\\\\', '\\"'), trim($clearHtml ? strip_tags($val) : $val));
         
